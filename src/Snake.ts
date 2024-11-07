@@ -1,4 +1,5 @@
 import { Point } from "./Point.js";
+import { Display } from "./Display.js";
 
 export class Snake extends Point {
     private body: Point[];
@@ -7,7 +8,7 @@ export class Snake extends Point {
 
     constructor(x: number, y: number, color: string = "green") {
         super(x, y);
-        this.body = [new Point(x, y)];
+        this.body =  [new Point(x, y), new Point(x, y), new Point(x, y)];
         this.direction = "right";
         this.color = color;
     }
@@ -47,7 +48,7 @@ export class Snake extends Point {
     }
 
     public changeDirection(newDirection: string): void {
-        // Update direction with some checks to prevent reversing directly
+        // Update direction if it's not the opposite
         const opposites: { [key: string]: string } = {
         up: "down",
         down: "up",
@@ -70,8 +71,19 @@ export class Snake extends Point {
         let head = this.body[0];
         for (let i = 1; i < this.body.length; i++) {
         if (head.hasSamePosition(this.body[i])) {
+            console.log("Collision :",true);
+            
             return true;
         }
+        }
+        console.log("Collision :",false);
+        return false;
+    }
+
+    public detecteWallCollision(): boolean {
+        let head = this.body[0];
+        if (head.x < 0 || head.x >= Display.canvasWalls[0] || head.y < 0 || head.y >= Display.canvasWalls[1]) {
+        return true;
         }
         return false;
     }

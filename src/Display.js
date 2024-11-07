@@ -1,6 +1,6 @@
 // import Game from "./Game";
 export class Display {
-    constructor(width, height, scale = 10, speed = 100) {
+    constructor(width, height, scale = 10, speed = 200) {
         this.score = 0;
         this.scale = scale;
         this.speed = speed;
@@ -11,7 +11,17 @@ export class Display {
         let display = document.getElementById("display");
         if (display != null)
             display.appendChild(canvas);
+        Display.canvasWalls = [width, height];
     }
+    // public getCanvasWalls(): number[] {
+    //     if (this.ctx != null) {
+    //     return [
+    //         this.canvasWalls[0] = this.ctx.canvas.width / this.scale,
+    //         this.canvasWalls[1] = this.ctx.canvas.height / this.scale,
+    //     ];
+    //     }
+    //     return [0, 0];
+    // }
     drawRectangle(x, y, color) {
         if (this.ctx != null) {
             this.ctx.beginPath();
@@ -55,3 +65,4 @@ export class Display {
         requestAnimationFrame(loop);
     }
 }
+Display.canvasWalls = [0, 0];

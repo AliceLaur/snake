@@ -29,25 +29,42 @@ export class Game {
         }
     }
     play(display) {
-        if (this.isGameOver)
-            return true;
-        // Mettre à jour la position du serpent
-        this.snake.move();
-        // Vérifier les collisions et autres logiques de jeu
-        if (this.snake.getBody()[0].x === this.apple.x && this.snake.getBody()[0].y === this.apple.y) {
-            this.snake.grow();
-            this.apple.generateNewPosition();
-            this.score++;
+        if (this.isGameOver === false) {
+            // Update the snake's position
+            this.snake.move();
+            // Check if the snake eats the apple
+            if (this.snake.getBody()[0].x === this.apple.x && this.snake.getBody()[0].y === this.apple.y) {
+                this.snake.grow();
+                this.apple.generateNewPosition();
+                this.score++;
+            }
+            // Display the apple and the snake
+            display.drawRectangle(this.apple.x, this.apple.y, 'red');
+            this.snake.getBody().forEach(segment => {
+                display.drawRectangle(segment.x, segment.y, this.snake.getColor());
+            });
+            // Check if the snake collides with walls
+            if (this.snake.detecteWallCollision() === true) {
+                this.isGameOver = true;
+                if (this.isGameOver === true) {
+                    console.log("coucou");
+                    let buttonPlaceholder = document.getElementById("playAgain");
+                    let button = document.createElement("button");
+                    button.innerHTML = "Play again";
+                    button.onclick = () => {
+                        this.snake = new Snake(10, 10);
+                        this.apple = new Apple(5, 5);
+                        this.score = 0;
+                        this.isGameOver = false;
+                        button.remove();
+                        display.play(this);
+                    };
+                    if (buttonPlaceholder != null)
+                        buttonPlaceholder.appendChild(button);
+                }
+            }
         }
-        // Redessiner la pomme et le serpent
-        display.drawRectangle(this.apple.x, this.apple.y, 'red');
-        this.snake.getBody().forEach(segment => {
-            display.drawRectangle(segment.x, segment.y, this.snake.getColor());
-        });
-        // Vérifier si le jeu est terminé (par exemple, collision avec les murs ou le corps du serpent)
-        if (this.snake.detectCollision()) {
-            this.isGameOver = true;
-        }
+        console.log("Game over ?", this.isGameOver);
         return this.isGameOver;
     }
     getScore() {

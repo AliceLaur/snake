@@ -7,13 +7,9 @@ export class Display {
     private scale: number;
     public speed: number;
     public score: number = 0;
+    public static canvasWalls: number[] = [0, 0];
 
-    constructor(
-        width: number,
-        height: number,
-        scale: number = 10,
-        speed: number = 100
-    ) {
+    constructor(width: number, height: number, scale: number = 10, speed: number = 200) {
         this.scale = scale;
         this.speed = speed;
         const canvas = document.createElement("canvas");
@@ -22,7 +18,18 @@ export class Display {
         this.ctx = canvas.getContext("2d");
         let display: HTMLElement | null = document.getElementById("display");
         if (display != null) display.appendChild(canvas);
+        Display.canvasWalls = [width, height];
     }
+
+    // public getCanvasWalls(): number[] {
+    //     if (this.ctx != null) {
+    //     return [
+    //         this.canvasWalls[0] = this.ctx.canvas.width / this.scale,
+    //         this.canvasWalls[1] = this.ctx.canvas.height / this.scale,
+    //     ];
+    //     }
+    //     return [0, 0];
+    // }
 
     public drawRectangle(x: number, y: number, color: string): void {
         if (this.ctx != null) {
